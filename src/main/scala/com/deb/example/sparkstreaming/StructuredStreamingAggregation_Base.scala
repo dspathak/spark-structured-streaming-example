@@ -63,11 +63,17 @@ abstract class StructuredStreamingAggregation_Base {
       
       val df = sparkSession
         .readStream
-        .schema(eventSchema)
-        .json(INPUT_DIRECTORY)
-        //.as(Encoders.bean(EventBean.class))
+        .format("kafka")
+        .option("kafka.bootstrap.servers", "localhost:9092")
+        .option("subscribe", "structuredstreaming_event_topic")
+        .load()
+      
+      import sparkSession.implicits._
+      
+      //val ds: Dataset[(String, String)] =df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)").as[(String, String)]      
+      val df1 = df.selectExpr("CAST(value AS STRING) as json").select(from_json($"json", eventSchema).as("event")).select($"event.id",$"event.command",$"event.recordType",$"event.miscInfo",$"event.category",$"event.cloudService",$"event.cloudProvider",$"event.eventCount",$"event.dataBytes",$"event.time")//unix_timestamp($"event.time", "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").cast(TimestampType))  
         
-      runStreamingQueries(sparkSession, df, BROKERLIST, TOPIC, TIMEWINDOW, WATERMARK)
+      runStreamingQueries(sparkSession, df1, BROKERLIST, TOPIC, TIMEWINDOW, WATERMARK)
    }
    
    def runStreamingQueries(sparkSession:SparkSession, df:DataFrame, BROKERLIST:String, TOPIC:String, TIMEWINDOW:String, WATERMARK:String) {
