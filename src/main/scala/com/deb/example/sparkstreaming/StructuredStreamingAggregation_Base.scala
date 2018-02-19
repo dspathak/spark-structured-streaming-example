@@ -1,4 +1,4 @@
-package com.oracle.deb.example.sparkstreaming
+package com.deb.example.sparkstreaming
 
 import org.apache.spark._
 import org.apache.spark.SparkContext._

@@ -1,6 +1,6 @@
 // Kafka setup instructions for Windows: https://dzone.com/articles/running-apache-kafka-on-windows-os
 
-package com.oracle.deb.example.sparkstreaming
+package com.deb.example.sparkstreaming
 
 import org.apache.spark._
 import org.apache.spark.SparkContext._

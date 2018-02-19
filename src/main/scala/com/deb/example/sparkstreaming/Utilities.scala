@@ -1,4 +1,4 @@
-package com.oracle.deb.example.sparkstreaming
+package com.deb.example.sparkstreaming
 
 import org.apache.log4j.Level
 import java.util.regex.Pattern
